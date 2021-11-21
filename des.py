@@ -167,7 +167,6 @@ class SchedulerDES(object):
             self.__log_events_queue()
 
             # Remove the next event to be processed from the queue
-            print(len(self.events_queue))
             cur_event = self.events_queue.popleft()
             self._logger.debug("Processing event: " + str(cur_event) + " at time " + str(self.time))
 
@@ -183,7 +182,6 @@ class SchedulerDES(object):
 
             # Run scheduler to select next process to execute
             process_to_run = self.scheduler_func(cur_event) #! here comes my job: need to return one process that is ready to be executed from the queue (event or processes, I don't know yet)
-            print(len(self.events_queue))
             if process_to_run is None:
                 raise ValueError("Scheduler didn't select any process to run!!!")
             self._logger.info(
