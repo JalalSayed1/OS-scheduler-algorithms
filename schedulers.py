@@ -10,7 +10,7 @@ class FCFS(SchedulerDES):
         #! change status to PROC_CPU_REQ or PROC_CPU_DONE (?)
         #! cur_event has event_id(), event_type(), event_time()
         #! cur_event time is always <= self.time
-        print(f"Scheduler: looking for id = {cur_event.process_id}") #! del
+        # print(f"Scheduler: looking for id = {cur_event.process_id}") #! del
         for i, process in enumerate(self.processes):
             if (cur_event.process_id) == (process.process_id):
                 # process.process_state = ProcessStates.READY
@@ -32,7 +32,7 @@ class FCFS(SchedulerDES):
         # append duration time: tuple => (start time , finished time)
         cur_process._execution_times.append((self.time, finish_time)) #! is it ok to access _ fields?
         
-        print(f"current time is {self.time}") #! del
+        # print(f"current time is {self.time}") #! del
         
         cur_process._remaining_time = 0 # will run until completion
         cur_process._process_state = ProcessStates.TERMINATED
@@ -40,7 +40,7 @@ class FCFS(SchedulerDES):
         process_id = cur_process.process_id
         eventtype = EventTypes.PROC_CPU_DONE
         
-        print("Dispatcher: info of the new event: " , process_id, eventtype, finish_time) #! del
+        # print("Dispatcher: info of the new event: " , process_id, eventtype, finish_time) #! del
         
         new_event = Event(process_id=process_id, event_type=eventtype, event_time=finish_time)
         return new_event
@@ -51,9 +51,9 @@ class SJF(SchedulerDES):
     def scheduler_func(self, cur_event):
         process_to_run = min([process for process in self.processes if process.process_state == ProcessStates.READY], key=lambda x:x.service_time)
         # processs =[process.service_time for process in self.processes]
-        print("## SJF process to run service time is:", process_to_run)
-        print("process ids that are ready:", [process.process_id for process in self.processes if process.process_state == ProcessStates.READY])
-        print("process service times:", [process.service_time for process in self.processes])
+        # print("## SJF process to run service time is:", process_to_run)
+        # print("process ids that are ready:", [process.process_id for process in self.processes if process.process_state == ProcessStates.READY])
+        # print("process service times:", [process.service_time for process in self.processes])
         
         # print(min([process.service_time for process in process_to_run]))
         # for i, process in enumerate(self.processes):
@@ -68,7 +68,7 @@ class SJF(SchedulerDES):
         # append duration time: tuple => (start time , finished time)
         cur_process._execution_times.append((self.time, finish_time))
         
-        print(f"current time is {self.time}") #! del
+        # print(f"current time is {self.time}") #! del
         
         cur_process._remaining_time = 0 # will run until completion
         cur_process._process_state = ProcessStates.TERMINATED
@@ -76,7 +76,7 @@ class SJF(SchedulerDES):
         process_id = cur_process.process_id
         eventtype = EventTypes.PROC_CPU_DONE
         
-        print("Dispatcher: info of the new event: " , process_id, eventtype, finish_time) #! del
+        # print("Dispatcher: info of the new event: " , process_id, eventtype, finish_time) #! del
         
         new_event = Event(process_id=process_id, event_type=eventtype, event_time=finish_time)
         return new_event
@@ -124,19 +124,23 @@ class SRTF(SchedulerDES):
     def dispatcher_func(self, cur_process):
         cur_process.process_state = ProcessStates.RUNNING
         # will run cur_process until a new event is ready (until next_event_time):
-        next_event_time = next_event_time()
+        next_event_time = self.next_event_time()
+        # finish time is not known yet:
+        finish_time = 0
         
-        actual_run_for = min(next_event_time, cur_process.service_time)
+        if next_event_time>self.time or cur_process.remaining_time>0:
+            # choose the min time to run the process for, either until next event or until termination:
+            actual_run_for = min(next_event_time-self.time, cur_process.remaining_time)
         
-        cur_process._remaining_time -= actual_run_for #! is ._remaining_time (protected field) same as .remaining_time (the property) ?
+            cur_process._remaining_time -= actual_run_for #! is ._remaining_time (protected field) same as .remaining_time (the property) ?
         
-        finish_time = self.time + actual_run_for
-        # append duration time: tuple => (start time , finished time)
-        cur_process._execution_times.append((self.time, finish_time))
+            finish_time = self.time + actual_run_for
+            
+            # append duration time: tuple => (start time , finished time)
+            cur_process._execution_times.append((self.time, finish_time))
         
-        process_id = cur_process.process_id
         
-        # if no more CPU processing is required by this process:
+        
         if cur_process._remaining_time == 0:
             cur_process._process_state = ProcessStates.TERMINATED
             eventtype = EventTypes.PROC_CPU_DONE
@@ -145,6 +149,7 @@ class SRTF(SchedulerDES):
             cur_process._process_state = ProcessStates.READY
             eventtype = EventTypes.PROC_CPU_REQ
         
+        process_id = cur_process.process_id
         new_event = Event(process_id=process_id, event_type=eventtype, event_time=finish_time)
         return new_event
         

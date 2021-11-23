@@ -64,12 +64,6 @@ simulators = [FCFS(num_processes=num_processes, arrivals_per_time_unit=arrivals_
                    avg_cpu_burst_time=avg_cpu_burst_time, context_switch_time=context_switch_time)
               ]
 
-# print("-----")
-# print(simulators[-1].full_name() + ":")
-# logging.info("--- " + simulators[-1].full_name() + " ---")
-# simulators[-1].run(seed)
-# simulators[-1].print_statistics()
-
 # run simulators:
 for sim in simulators:
     print("-----")
