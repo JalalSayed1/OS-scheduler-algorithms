@@ -123,11 +123,16 @@ class SRTF(SchedulerDES):
     #! do we run the process for a slice of time then check processes list to run the shortest remaining time process?
     def dispatcher_func(self, cur_process):
         cur_process.process_state = ProcessStates.RUNNING
+        # will run cur_process until a new event is ready (until next_event_time):
+        next_event_time = next_event_time()
         
-        # run the process for a slice of time
-        # .run_for will add the execution time tuple to execution list:
-        actually_run_for = cur_process.run_for(quantum=self.quantum, cur_time=self.time)
-        finish_time = self.time + actually_run_for
+        actual_run_for = min(next_event_time, cur_process.service_time)
+        
+        cur_process._remaining_time -= actual_run_for #! is ._remaining_time (protected field) same as .remaining_time (the property) ?
+        
+        finish_time = self.time + actual_run_for
+        # append duration time: tuple => (start time , finished time)
+        cur_process._execution_times.append((self.time, finish_time))
         
         process_id = cur_process.process_id
         
@@ -135,14 +140,97 @@ class SRTF(SchedulerDES):
         if cur_process._remaining_time == 0:
             cur_process._process_state = ProcessStates.TERMINATED
             eventtype = EventTypes.PROC_CPU_DONE
-
-        # if this process did not finish executing, return a new event with the remaining time so we can check again (by the scheduler_func) if there is another process with a shorter remaining time in the processes queue available:
+            
         else:
             cur_process._process_state = ProcessStates.READY
             eventtype = EventTypes.PROC_CPU_REQ
-            
+        
         new_event = Event(process_id=process_id, event_type=eventtype, event_time=finish_time)
         return new_event
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        # cur_process.process_state = ProcessStates.RUNNING
+        
+        # # run the process for a slice of time
+        # # .run_for will add the execution time tuple to execution list:
+        # actually_run_for = cur_process.run_for(quantum=self.quantum, cur_time=self.time)
+        # finish_time = self.time + actually_run_for
+        
+        # process_id = cur_process.process_id
+        
+        # # if no more CPU processing is required by this process:
+        # if cur_process._remaining_time == 0:
+        #     cur_process._process_state = ProcessStates.TERMINATED
+        #     eventtype = EventTypes.PROC_CPU_DONE
+
+        # # if this process did not finish executing, return a new event with the remaining time so we can check again (by the scheduler_func) if there is another process with a shorter remaining time in the processes queue available:
+        # else:
+        #     cur_process._process_state = ProcessStates.READY
+        #     eventtype = EventTypes.PROC_CPU_REQ
+            
+        # new_event = Event(process_id=process_id, event_type=eventtype, event_time=finish_time)
+        # return new_event
 
         # check that is there is a process with a shorter time than the current process in processes queue:
         # shortest_process = min([process for process in self.processes if process.process_state == ProcessStates.READY], key=lambda x:x.remaining_time)
