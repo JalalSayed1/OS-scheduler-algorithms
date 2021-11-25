@@ -27,7 +27,7 @@ parser.add_argument('--quantum', '-q', help='Duration of each quantum (Round Rob
 parser.add_argument('--verbose', '-v', help='Turn logging on; specify multiple times for more verbosity', action='count')
 args = parser.parse_args() # returns a Namespace object
 
-#! what does this do:   
+ 
 if args.seed:
     seed = args.seed
 if args.verbose == 1:
@@ -63,7 +63,6 @@ simulators = [FCFS(num_processes=num_processes, arrivals_per_time_unit=arrivals_
               SRTF(num_processes=num_processes, arrivals_per_time_unit=arrivals_per_time_unit,
                    avg_cpu_burst_time=avg_cpu_burst_time, context_switch_time=context_switch_time)
               ]
-
 
 # run simulators:
 for sim in simulators:

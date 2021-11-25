@@ -40,7 +40,7 @@ class SchedulerDES(object):
         
         self.num_processes = num_processes
         self._arrivals_per_time_unit = arrivals_per_time_unit
-        self._arrival_time = partial(random.exponential, 1.0 / arrivals_per_time_unit)  # Poisson inter-arrival time #! how do partial and exponential work?
+        self._arrival_time = partial(random.exponential, 1.0 / arrivals_per_time_unit)  # Poisson inter-arrival time
         self._avg_cpu_burst_time = avg_cpu_burst_time
         self._service_time = partial(random.exponential, avg_cpu_burst_time) # Exponential service time
         self.context_switch_time = context_switch_time
@@ -181,7 +181,7 @@ class SchedulerDES(object):
             self.__log_processes(logging.INFO)
 
             # Run scheduler to select next process to execute
-            process_to_run = self.scheduler_func(cur_event) #! here comes my job: need to return one process that is ready to be executed from the queue (event or processes, I don't know yet)
+            process_to_run = self.scheduler_func(cur_event)
             if process_to_run is None:
                 raise ValueError("Scheduler didn't select any process to run!!!")
             self._logger.info(
@@ -197,7 +197,7 @@ class SchedulerDES(object):
                 self.time += self.context_switch_time
 
             # Run the dispatcher to execute the selected process
-            ret_event = self.dispatcher_func(process_to_run) #! here comes my job: it will execute the process depending on what algorithm used
+            ret_event = self.dispatcher_func(process_to_run)
 
             # Add the resulting event to the queue and advance the internal clock, as appropriate
             self._logger.debug("Resulting event: " + str(ret_event))
@@ -211,7 +211,7 @@ class SchedulerDES(object):
         self.__log_processes()
         self._logger.info(self.simple_name() + " finished at time " + str(self.time))
 
-    #! why do we have scheduler and dispatcher funcs here?
+
     def scheduler_func(self, cur_event):
         """Processes the current event and returns the process to be executed next.
 

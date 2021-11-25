@@ -51,9 +51,9 @@ class Process(object):
         
         self._remaining_time = service_time
         self._process_state = ProcessStates.NEW
-        #! execution time will be list of tuples. to return the departure time: "return self._execution_times[-1][1]"
-        #! sum_waiting_time += t[0] - prev_time prev_time = t[1]
-        #! t[0] is the time it started and t[1] is the time it ended:
+        # execution time will be list of tuples. to return the departure time: "return self._execution_times[-1][1]"
+        # sum_waiting_time += t[0] - prev_time prev_time = t[1]
+        # t[0] is the time it started and t[1] is the time it ended:
         self._execution_times = []
         self._logger = logging.getLogger(__name__)
 
@@ -142,8 +142,9 @@ class Process(object):
         Returns the amount of time for which the process actually executed.
         """
         actually_run_for = min(quantum, self._remaining_time)
+        
         self._logger.debug("[#" + str(self._process_id) + "] actually run for " + str(actually_run_for))
         self._remaining_time -= actually_run_for
-
+        
         self._execution_times.append((cur_time, cur_time + actually_run_for))
         return actually_run_for
