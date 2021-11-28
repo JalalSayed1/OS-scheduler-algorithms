@@ -43,7 +43,7 @@
   3. To specify the seed:
 
     python main.py -S <SEED>
-  4. To get help:
+  4. To get help and to see the other available parameters:
 
     python main.py -h
 
