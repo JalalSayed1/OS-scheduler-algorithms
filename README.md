@@ -3,7 +3,6 @@
  1. This was part of my Notworking and Operating Systems Essentials (NOSE2 COMPSCI2024) course in Level 2.
  2. Implemented the most popular OS scheduling algorithms only: First Come First Serve - FCFS, Shortest Job First - SJF, Round Robin - RR and Shortest Remaining Time First - SRTF.
  3. I only implemented the algorithms; I did not design the Discrete Event Simulator - DES.
- 4. 
 
 # About the scheduling algorithms:
 
