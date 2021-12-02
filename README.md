@@ -46,7 +46,7 @@
 
     python main.py -h
 
-# Thing I learnt when making this:
+# What did I learn from this:
 
  1. OS scheduling algorithms and how they work exactly.
  2. Developed my skills on OOP in Python.
