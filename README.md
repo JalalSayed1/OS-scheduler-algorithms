@@ -1,11 +1,13 @@
-# About the project:
+# OS-scheduler-algorithms
+
+## About the project:
 
  1. This was the second accessed execise of my Notworking and Operating Systems course (NOSE2 COMPSCI2024) course in Level 2 - semester 1 on 26/11/2021.
  2. I achieved in this project a grade of A2 ≈ (85% - 91%).
  3. Implemented the most popular OS scheduling algorithms only: First Come First Serve - FCFS, Shortest Job First - SJF, Round Robin - RR and Shortest Remaining Time First - SRTF.
  4. I only implemented the algorithms; I did not design the Discrete Event Simulator - DES.
 
-# About the scheduling algorithms:
+## About the scheduling algorithms:
 
  1. **FCFS** (non-pre-emptive): Processes should be executed in the
     order in which they arrived at the system. Conceptually, when a
@@ -33,7 +35,7 @@
     results in some other process having a lower remaining execution
     time than the currently executing one.
 
-# How to use:
+## How to use:
 
  1.  Make sure you are in the right directory. If not, use  `cd <YOUR/FOLDER/PATH>`  to navigate to the correct folder.
  2. Use the following command to test the algorithms using a random seed:
@@ -47,7 +49,7 @@
 
     python main.py -h
 
-# What did I learn from this:
+## What did I learn from this:
 
  1. OS scheduling algorithms and how they work exactly.
  2. Developed my skills on OOP in Python.
